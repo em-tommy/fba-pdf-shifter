@@ -1,41 +1,42 @@
 import streamlit as st
-from PyPDF2 import PdfReader, PdfWriter, Transformation
-import io
+from pypdf import PdfReader, PdfWriter, Transformation
+from io import BytesIO
 import os
 
 st.title("FBAバーコードPDF位置調整ツール")
-st.write("右に1mm、下に1mmずらして印刷ずれを補正します")
+st.write("右に1mm、下に1mmずらしてPDFを再生成します。")
 
-uploaded_file = st.file_uploader("PDFファイルをアップロード", type=["pdf"])
+uploaded_file = st.file_uploader("PDFファイルをアップロードしてください", type="pdf")
 
-if uploaded_file is not None:
-    # 読み込み
-    reader = PdfReader(uploaded_file)
-    writer = PdfWriter()
+if uploaded_file:
+    try:
+        # PDF読み込み
+        reader = PdfReader(uploaded_file)
+        writer = PdfWriter()
 
-    # 1mm = 約2.834ポイント
-    dx = 2.834  # 右に1mm
-    dy = -2.834 # 下に1mm
+        for page in reader.pages:
+            # 単位：1pt = 1/72 inch。1mm ≒ 2.8346 pt
+            shift = Transformation().translate(tx=2.8346, ty=-2.8346)
+            page.add_transformation(shift)
+            writer.add_page(page)
 
-    for page in reader.pages:
-        page.add_transformation(Transformation().translate(dx, dy))
-        writer.add_page(page)
+        # メタデータ引き継ぎ（なくてもよいが推奨）
+        writer.add_metadata(reader.metadata or {})
 
-    # 出力用バッファに保存
-    output = io.BytesIO()
-    writer.write(output)
-    output.seek(0)
+        # 書き出し
+        output = BytesIO()
+        writer.write(output)
+        output.seek(0)
 
-    # 変換後のファイル名生成
-    original_name = uploaded_file.name
-    base, ext = os.path.splitext(original_name)
-    adjusted_filename = f"{base}_右1mm_下1mmずらし変換済{ext}"
+        # 元ファイル名に追記
+        original_filename = uploaded_file.name.rsplit(".pdf", 1)[0]
+        new_filename = f"{original_filename}_右1mm_下1mmずらし変換済.pdf"
 
-    # ダウンロードボタン表示
-    st.success("変換が完了しました！")
-    st.download_button(
-        label="ずらしたPDFをダウンロード",
-        data=output,
-        file_name=adjusted_filename,
-        mime="application/pdf"
-    )
+        st.download_button(
+            label="変換後のPDFをダウンロード",
+            data=output,
+            file_name=new_filename,
+            mime="application/pdf"
+        )
+    except Exception as e:
+        st.error(f"変換中にエラーが発生しました: {e}")
