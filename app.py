@@ -8,7 +8,7 @@ st.set_page_config(page_title="FBAバーコードPDF位置調整ツール")
 st.markdown("<h3>FBAバーコードPDF位置調整ツール</h3>", unsafe_allow_html=True)
 
 uploaded_file = st.file_uploader(
-    "元のPDFファイルをドラッグ＆ドロップ",
+    "変換したいPDFファイルをドラッグ＆ドロップするか Browse files でファイルを選択",
     type="pdf",
     label_visibility="visible",
     accept_multiple_files=False
