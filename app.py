@@ -8,7 +8,7 @@ st.set_page_config(page_title="FBAバーコードPDF位置調整ツール")
 st.markdown("<h3>FBAバーコードPDF位置調整ツール</h3>", unsafe_allow_html=True)
 
 uploaded_file = st.file_uploader(
-    "セラーセントラルで生成された40面バーコードPDFを右に1mm、下に1mmずらして再生成します",
+    "セラーセントラルで生成された40面バーコードPDFを右に1mm、下に1mmずらして再生成します"
     "変換したいPDFファイルをドラッグ＆ドロップするか Browse files でファイルを選択",
     type="pdf",
     label_visibility="visible",
