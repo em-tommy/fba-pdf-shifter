@@ -38,7 +38,7 @@ if uploaded_file is not None:
     output_stream.seek(0)
 
     st.markdown(
-        f"<p style='color:green; font-weight:bold;'>✅ 変換が成功しました！</p>",
+        f"<p style='color:green; font-weight:bold;'>✅ 変換成功！</p>",
         unsafe_allow_html=True
     )
     st.markdown(f"<p><b>生成ファイル名：</b>{output_filename}</p>", unsafe_allow_html=True)
