@@ -13,7 +13,7 @@ st.markdown("<p style='font-size:0.9rem;'>セラーセントラルで生成さ�
 
 # ファイルアップローダー
 uploaded_file = st.file_uploader(
-    label="ここに元のPDFファイルをドラッグ＆ドロップするかBrowse filesでファイルを選択してください",
+    label="元のPDFファイルをドラッグ＆ドロップするかBrowse filesでファイルを選択してください",
     type="pdf",
     label_visibility="visible",
     accept_multiple_files=False
